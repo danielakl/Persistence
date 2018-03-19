@@ -12,7 +12,7 @@ public class Account implements Entity, Serializable {
     private double balance;
     private String owner;
     @Version
-    private int lock;
+    private int locked;
 
     public Account() { }
 
