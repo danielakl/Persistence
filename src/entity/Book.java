@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @javax.persistence.Entity
 
-public final class Book implements Entity, Serializable {
+public class Book implements Entity, Serializable {
     @Id
     private String isbn;
     private String title;
