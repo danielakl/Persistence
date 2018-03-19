@@ -4,12 +4,13 @@
              version="1.0">
     <persistence-unit name="PersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-        <class>entity.Book</class>
+        <class>entity.Account</class>
         <properties>
             <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
             <property name="openjpa.ConnectionURL" value="jdbc:mysql://mysql.stud.iie.ntnu.no/g_tdat2003_t7"/>
             <property name="openjpa.ConnectionUserName" value="g_tdat2003_t7"/>
             <property name="openjpa.ConnectionPassword" value="nMzfg38c"/>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
         </properties>
     </persistence-unit>
 </persistence>
