@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              version="1.0">
-    <persistence-unit name="PersistenceUnit" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="Optimistic" transaction-type="RESOURCE_LOCAL">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <class>entity.Account</class>
         <properties>
@@ -11,6 +10,21 @@
             <property name="openjpa.ConnectionUserName" value="g_tdat2003_t7"/>
             <property name="openjpa.ConnectionPassword" value="nMzfg38c"/>
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
+            <property name="openjpa.Optimistic" value="true"/>
+            <property name="openjpa.LockManager" value="none"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="NoOptimistic" transaction-type="RESOURCE_LOCAL">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <class>entity.Account</class>
+        <properties>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://mysql.stud.iie.ntnu.no/g_tdat2003_t7"/>
+            <property name="openjpa.ConnectionUserName" value="g_tdat2003_t7"/>
+            <property name="openjpa.ConnectionPassword" value="nMzfg38c"/>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
+            <property name="openjpa.Optimistic" value="false"/>
+            <property name="openjpa.LockManager" value="none"/>
         </properties>
     </persistence-unit>
 </persistence>
