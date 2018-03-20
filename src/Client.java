@@ -114,7 +114,7 @@ public final class Client {
         String answer = scanner.nextLine().toLowerCase();
         if (answer.contains("y")) {
             long accountNumber = (long) Math.abs(Math.random() * Long.MAX_VALUE);
-            accountService.create(accountNumber, 100.0, owner);
+            accountService.create(accountNumber, 0.0, owner);
             currentAccount = accountService.find(accountNumber);
             return 0;
         }
