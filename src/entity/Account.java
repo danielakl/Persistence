@@ -1,12 +1,12 @@
 package entity;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
 import java.io.Serializable;
 
-@javax.persistence.Entity
-
-public class Account implements Entity, Serializable {
+@Entity
+public class Account implements Serializable {
     @Id
     private long accountNumber;
     private double balance;

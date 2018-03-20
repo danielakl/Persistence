@@ -1,7 +1,6 @@
 package dao;
 
 import entity.Account;
-import entity.Entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
