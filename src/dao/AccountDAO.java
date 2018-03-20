@@ -7,16 +7,14 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AccountDAO implements DAO {
+public final class AccountDAO {
     private final EntityManagerFactory emf;
 
     public AccountDAO(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
-    @Override
-    public void create(Entity entity) {
-        Account account = (Account) entity;
+    public void create(Account account) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -29,9 +27,7 @@ public final class AccountDAO implements DAO {
         close(em);
     }
 
-    @Override
-    public Entity find(Object identifier) {
-        long accountNumber = (long) identifier;
+    public Account find(long accountNumber) {
         EntityManager em = emf.createEntityManager();
         try {
             return em.find(Account.class, accountNumber);
@@ -43,9 +39,8 @@ public final class AccountDAO implements DAO {
         return null;
     }
 
-    @Override
     @SuppressWarnings("unchecked")
-    public List<Entity> findAll() {
+    public List<Account> findAll() {
         EntityManager em = emf.createEntityManager();
         try {
             Query query = em.createQuery("SELECT o FROM Account o", Account.class);
@@ -58,9 +53,22 @@ public final class AccountDAO implements DAO {
         return new ArrayList<>();
     }
 
-    @Override
-    public void update(Entity entity) {
-        Account account = (Account) entity;
+    @SuppressWarnings("unchecked")
+    public List<Account> findAll(String owner) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query query = em.createQuery("SELECT o FROM Account o WHERE o.owner = :owner");
+            query.setParameter("owner", owner);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        close(em);
+        return new ArrayList<>();
+    }
+
+    public void update(Account account) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -73,9 +81,7 @@ public final class AccountDAO implements DAO {
         close(em);
     }
 
-    @Override
-    public void delete(Object identifier) {
-        long accountNumber = (long) identifier;
+    public void delete(long accountNumber) {
         EntityManager em = emf.createEntityManager();
         try {
             Account account = (Account) find(accountNumber);

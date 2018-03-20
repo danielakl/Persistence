@@ -2,7 +2,6 @@ package service;
 
 import dao.AccountDAO;
 import entity.Account;
-import entity.Entity;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -45,9 +44,26 @@ public final class AccountService {
      */
     public Account find(long accountNumber) {
         if (accountNumber >= 0) {
-            return (Account) accountDAO.find(accountNumber);
+            return accountDAO.find(accountNumber);
         }
         return null;
+    }
+
+    /**
+     * Finds all accounts.
+     * @return a list of all accounts, or empty list if there are no accounts.
+     */
+    public List<Account> findAll() {
+        return accountDAO.findAll();
+    }
+
+    /**
+     * Finds all accounts for an owner.
+     * @param owner - the owner of the accounts.
+     * @return a list of accounts that belong to the given owner.
+     */
+    public List<Account> findAll(String owner) {
+        return accountDAO.findAll(owner);
     }
 
     /**
@@ -68,10 +84,28 @@ public final class AccountService {
      * @param owner         - The new owner of the account.
      */
     public void changeOwner(long accountNumber, String owner) {
-        Account account = (Account) accountDAO.find(accountNumber);
+        Account account = accountDAO.find(accountNumber);
         if (account != null) {
             account.setOwner(owner);
             accountDAO.update(account);
+        }
+    }
+
+    /**
+     * Delete the account that have the given account number.
+     * @param accountNumber - The unique account number to identify the account.
+     */
+    public void delete(long accountNumber) {
+        accountDAO.delete(accountNumber);
+    }
+
+    /**
+     * Delete the given account.
+     * @param account - The account to delete.
+     */
+    public void delete(Account account) {
+        if (account != null) {
+            accountDAO.delete(account.getAccountNumber());
         }
     }
 
