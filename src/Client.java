@@ -149,8 +149,8 @@ public final class Client {
                 try {
                     accountService.transfer(currentAccount, recipient, amount);
                 } catch (OptimisticLockException ole) {
-                    System.err.println("The state of your account has been changed since you started the transfer, " +
-                            "you will need to redo your changes.");
+                    System.err.println("The state of your account or the recipient's account has been changed since you " +
+                            "started the transfer, you will need to redo your changes.");
                     displayTransfer(accountService, scanner);
                 }
             }
