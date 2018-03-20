@@ -8,8 +8,6 @@ import java.util.Scanner;
 
 public final class Client {
     /* Client Settings */
-    private static boolean OPTIMISTIC = false;
-
     private static Account currentAccount;
 
     /* Menu Options */
@@ -20,14 +18,11 @@ public final class Client {
     private static final int EXIT = 5;
 
     public static void main(String[] args) {
-        processArgs(args);
-
         EntityManagerFactory emf = null;
         try {
-            emf = Persistence.createEntityManagerFactory(OPTIMISTIC ? "Optimistic" : "NoOptimistic", System.getProperties());
+            emf = Persistence.createEntityManagerFactory("persistenceUnit", System.getProperties());
             AccountService accountService = new AccountService(emf);
 
-            System.out.println((OPTIMISTIC ? "Using" : "Not using") + " optimistic mode.");
             Scanner scanner = new Scanner(System.in);
             int option = 0;
 
@@ -84,22 +79,6 @@ public final class Client {
             e.printStackTrace();
         }
         if (emf != null && emf.isOpen()) emf.close();
-    }
-
-    /**
-     * Process command line arguments, setting initial settings.
-     * @param args - The given arguments.
-     */
-    private static void processArgs(String[] args) {
-        for (String arg : args) {
-            switch (arg.toLowerCase()) {
-                case "optimistic":
-                    OPTIMISTIC = true;
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 
     /**
