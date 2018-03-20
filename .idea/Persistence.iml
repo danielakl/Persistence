@@ -6,7 +6,10 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="OpenJPA" />
         <datasource-mapping>
+          <factory-entry name="NoOptimistic" />
+          <factory-entry name="Optimistic" />
           <factory-entry name="PersistenceUnit" />
+          <factory-entry name="persistenceUnit" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/resources/META-INF/persistence.xml" />
       </configuration>
