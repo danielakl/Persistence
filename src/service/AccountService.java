@@ -16,6 +16,7 @@ public final class AccountService {
 
     /**
      * Create a new account.
+     *
      * @param account - The account to create.
      */
     public void create(Account account) {
@@ -26,6 +27,7 @@ public final class AccountService {
 
     /**
      * Create a new account.
+     *
      * @param accountNumber - The unique account number.
      * @param balance       - The starting balance of the account.
      * @param owner         - The owner of the account.
@@ -40,6 +42,7 @@ public final class AccountService {
 
     /**
      * Find an account.
+     *
      * @param accountNumber - The unique account number to identify the account.
      * @return an Account or null if not found or invalid account number.
      */
@@ -52,6 +55,7 @@ public final class AccountService {
 
     /**
      * Finds all accounts.
+     *
      * @return a list of all accounts, or empty list if there are no accounts.
      */
     public List<Account> findAll() {
@@ -60,6 +64,7 @@ public final class AccountService {
 
     /**
      * Finds all accounts for an owner.
+     *
      * @param owner - the owner of the accounts.
      * @return a list of accounts that belong to the given owner.
      */
@@ -69,8 +74,9 @@ public final class AccountService {
 
     /**
      * Change the ownership of an account.
-     * @param account   - The account to change ownership of.
-     * @param owner     - The new owner of the account.
+     *
+     * @param account - The account to change ownership of.
+     * @param owner   - The new owner of the account.
      */
     public void changeOwner(Account account, String owner) {
         if (account != null) {
@@ -81,6 +87,7 @@ public final class AccountService {
 
     /**
      * Change the ownership of an account.
+     *
      * @param accountNumber - The account number to identify the account.
      * @param owner         - The new owner of the account.
      */
@@ -94,6 +101,7 @@ public final class AccountService {
 
     /**
      * Delete the account that have the given account number.
+     *
      * @param accountNumber - The unique account number to identify the account.
      */
     public void delete(long accountNumber) {
@@ -102,6 +110,7 @@ public final class AccountService {
 
     /**
      * Delete the given account.
+     *
      * @param account - The account to delete.
      */
     public void delete(Account account) {
@@ -113,8 +122,9 @@ public final class AccountService {
     /**
      * Check if the account have sufficient funds. Account cannot be null,
      * and the amount must be positive.
-     * @param account   - The account to check.
-     * @param amount    - The amount to check for.
+     *
+     * @param account - The account to check.
+     * @param amount  - The amount to check for.
      * @return true if the account have a balance that is greater or equal to the amount.
      */
     private boolean sufficientFunds(Account account, double amount) {
@@ -123,8 +133,9 @@ public final class AccountService {
 
     /**
      * Deposit funds into an account.
-     * @param account   - The account to deposit to.
-     * @param amount    - The amount to deposit.
+     *
+     * @param account - The account to deposit to.
+     * @param amount  - The amount to deposit.
      */
     public void deposit(Account account, double amount) throws OptimisticLockException {
         if (account != null) {
@@ -136,8 +147,9 @@ public final class AccountService {
 
     /**
      * Withdraw funds from an account.
-     * @param account   - The account to withdraw from.
-     * @param amount    - The amount to withdraw.
+     *
+     * @param account - The account to withdraw from.
+     * @param amount  - The amount to withdraw.
      */
     public void withdraw(Account account, double amount) throws OptimisticLockException {
         if (account != null) {
@@ -152,6 +164,7 @@ public final class AccountService {
     /**
      * Transfer currency from sender to recipient if the sender have sufficient
      * amount of currency.
+     *
      * @param sender    - The account to transfer from.
      * @param recipient - The account to transfer to.
      * @param amount    - The amount to transfer.

@@ -54,7 +54,7 @@ public final class Client {
                         }
                     }
                 }
-            } while(currentAccount == null);
+            } while (currentAccount == null);
 
             while (option != EXIT) {
                 option = displayMenu(accountService, scanner);
@@ -84,9 +84,10 @@ public final class Client {
 
     /**
      * Create a new account.
-     * @param accountService    - Service used to create a new account.
-     * @param scanner           - Scanner used to read user input.
-     * @param owner             - The owner of the new account.
+     *
+     * @param accountService - Service used to create a new account.
+     * @param scanner        - Scanner used to read user input.
+     * @param owner          - The owner of the new account.
      * @return an integer signal, EXIT if the client should exit otherwise 0.
      */
     private static int createAccount(AccountService accountService, Scanner scanner, String owner) {
@@ -103,6 +104,7 @@ public final class Client {
 
     /**
      * Displays an interactive user menu.
+     *
      * @param scanner - A scanner used to read user input.
      * @return the option the user picked.
      */
@@ -127,8 +129,9 @@ public final class Client {
 
     /**
      * Displays the menu for transferring funds to another account.
-     * @param accountService    - Service used to execute transaction.
-     * @param scanner           - Scanner used to read user input.
+     *
+     * @param accountService - Service used to execute transaction.
+     * @param scanner        - Scanner used to read user input.
      */
     private static void displayTransfer(AccountService accountService, Scanner scanner) {
         currentAccount = accountService.find(currentAccount.getAccountNumber());
@@ -156,8 +159,9 @@ public final class Client {
 
     /**
      * Displays the menu for depositing funds into your account.
-     * @param accountService    - Service used to execute deposit.
-     * @param scanner           - Scanner used to read user input.
+     *
+     * @param accountService - Service used to execute deposit.
+     * @param scanner        - Scanner used to read user input.
      */
     private static void displayDeposit(AccountService accountService, Scanner scanner) {
         currentAccount = accountService.find(currentAccount.getAccountNumber());
@@ -178,8 +182,9 @@ public final class Client {
 
     /**
      * Displays the menu for withdrawing funds from your account.
-     * @param accountService    - Service used to execute withdrawal.
-     * @param scanner           - Scanner used to read user input.
+     *
+     * @param accountService - Service used to execute withdrawal.
+     * @param scanner        - Scanner used to read user input.
      */
     private static void displayWithdraw(AccountService accountService, Scanner scanner) {
         currentAccount = accountService.find(currentAccount.getAccountNumber());
@@ -200,6 +205,7 @@ public final class Client {
 
     /**
      * Display all accounts.
+     *
      * @param accountService - used to retrieve accounts.
      */
     private static void displayAllAccounts(AccountService accountService) {

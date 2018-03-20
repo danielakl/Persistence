@@ -14,7 +14,8 @@ public class Account implements Serializable {
     @Version
     private int locked;
 
-    public Account() { }
+    public Account() {
+    }
 
     public Account(long accountNumber, double balance, String owner) {
         this.accountNumber = accountNumber;
