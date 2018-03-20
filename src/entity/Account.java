@@ -60,4 +60,18 @@ public class Account implements Serializable {
                 "', balance: '" + balance +
                 "', owner: " + owner;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof Account)) {
+            return false;
+        }
+
+        Account otherAccount = (Account) other;
+        return accountNumber == otherAccount.getAccountNumber();
+    }
 }

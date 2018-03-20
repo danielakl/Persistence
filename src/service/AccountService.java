@@ -4,6 +4,7 @@ import dao.AccountDAO;
 import entity.Account;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.OptimisticLockException;
 import java.util.List;
 
 public final class AccountService {
@@ -125,7 +126,7 @@ public final class AccountService {
      * @param account   - The account to deposit to.
      * @param amount    - The amount to deposit.
      */
-    public void deposit(Account account, double amount) {
+    public void deposit(Account account, double amount) throws OptimisticLockException {
         if (account != null) {
             amount = Math.abs(amount);
             account.setBalance(account.getBalance() + amount);
@@ -138,7 +139,7 @@ public final class AccountService {
      * @param account   - The account to withdraw from.
      * @param amount    - The amount to withdraw.
      */
-    public void withdraw(Account account, double amount) {
+    public void withdraw(Account account, double amount) throws OptimisticLockException {
         if (account != null) {
             amount = Math.abs(amount);
             if (sufficientFunds(account, amount)) {
@@ -155,7 +156,7 @@ public final class AccountService {
      * @param recipient - The account to transfer to.
      * @param amount    - The amount to transfer.
      */
-    public void transfer(Account sender, Account recipient, double amount) {
+    public void transfer(Account sender, Account recipient, double amount) throws OptimisticLockException {
         if (sender != null && recipient != null && !(sender.equals(recipient))) {
             amount = Math.abs(amount);
             if (sufficientFunds(sender, amount)) {

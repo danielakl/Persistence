@@ -1,4 +1,5 @@
 import entity.Account;
+import org.apache.openjpa.persistence.OptimisticLockException;
 import service.AccountService;
 
 import javax.persistence.EntityManagerFactory;
@@ -56,7 +57,7 @@ public final class Client {
             } while(currentAccount == null);
 
             while (option != EXIT) {
-                option = displayMenu(scanner);
+                option = displayMenu(accountService, scanner);
                 switch (option) {
                     case TRANSFER:
                         displayTransfer(accountService, scanner);
@@ -105,8 +106,9 @@ public final class Client {
      * @param scanner - A scanner used to read user input.
      * @return the option the user picked.
      */
-    private static int displayMenu(Scanner scanner) {
-        System.out.println("\nCurrent " + currentAccount.toString());
+    private static int displayMenu(AccountService accountService, Scanner scanner) {
+        currentAccount = accountService.find(currentAccount.getAccountNumber());
+        System.out.println("\nCurrent " + ((currentAccount != null) ? currentAccount.toString() : "ACCOUNT MISSING!"));
         System.out.println("\nMain Menu\n" +
                 TRANSFER + ": Transfer funds to another account.\n" +
                 DEPOSIT + ": Deposit funds into your account.\n" +
@@ -120,7 +122,7 @@ public final class Client {
         } else if (option.equalsIgnoreCase("e") || option.equalsIgnoreCase("exit")) {
             return EXIT;
         }
-        return displayMenu(scanner);
+        return displayMenu(accountService, scanner);
     }
 
     /**
@@ -129,18 +131,25 @@ public final class Client {
      * @param scanner           - Scanner used to read user input.
      */
     private static void displayTransfer(AccountService accountService, Scanner scanner) {
+        currentAccount = accountService.find(currentAccount.getAccountNumber());
         System.out.println("\nWhich account do you wish to transfer funds to?");
         System.out.print("Account number: ");
         String input = scanner.nextLine().trim();
         if (input.matches("[0-9]+")) {
             long accountNumber = Long.parseLong(input);
             Account recipient = accountService.find(accountNumber);
-            System.out.println("Enter the amount you want to transfer.");
+            System.out.println("Enter the amount you want to transfer, current balance: " + currentAccount.getBalance());
             System.out.print("Amount: ");
             input = scanner.nextLine().trim().replace(',', '.');
             if (input.matches("[0-9.]+")) {
                 double amount = Double.parseDouble(input);
-                accountService.transfer(currentAccount, recipient, amount);
+                try {
+                    accountService.transfer(currentAccount, recipient, amount);
+                } catch (OptimisticLockException ole) {
+                    System.err.println("The state of your account has been changed since you started the transfer, " +
+                            "you will need to redo your changes.");
+                    displayTransfer(accountService, scanner);
+                }
             }
         }
     }
@@ -151,12 +160,19 @@ public final class Client {
      * @param scanner           - Scanner used to read user input.
      */
     private static void displayDeposit(AccountService accountService, Scanner scanner) {
-        System.out.println("\nCurrent balance: " + currentAccount.getBalance());
+        currentAccount = accountService.find(currentAccount.getAccountNumber());
+        System.out.println("\nCurrent balance: " + ((currentAccount != null) ? currentAccount.getBalance() : "MISSING ACCOUNT!"));
         System.out.print("Enter the amount to deposit: ");
         String input = scanner.nextLine().trim().replace(',', '.');
         if (input.matches("[0-9.]+")) {
             double amount = Double.parseDouble(input);
-            accountService.deposit(currentAccount, amount);
+            try {
+                accountService.deposit(currentAccount, amount);
+            } catch (OptimisticLockException ole) {
+                System.err.println("The state of your account has been changed since you started the deposit, " +
+                        "you will need to redo your changes.");
+                displayDeposit(accountService, scanner);
+            }
         }
     }
 
@@ -166,12 +182,19 @@ public final class Client {
      * @param scanner           - Scanner used to read user input.
      */
     private static void displayWithdraw(AccountService accountService, Scanner scanner) {
-        System.out.println("\nCurrent balance: " + currentAccount.getBalance());
+        currentAccount = accountService.find(currentAccount.getAccountNumber());
+        System.out.println("\nCurrent balance: " + ((currentAccount != null) ? currentAccount.getBalance() : "MISSING ACCOUNT!"));
         System.out.print("Enter the amount to withdraw: ");
         String input = scanner.nextLine().trim().replace(',', '.');
         if (input.matches("[0-9.]+")) {
             double amount = Double.parseDouble(input);
-            accountService.withdraw(currentAccount, amount);
+            try {
+                accountService.withdraw(currentAccount, amount);
+            } catch (OptimisticLockException ole) {
+                System.err.println("The state of your account has been changed since you started the withdraw, " +
+                        "you will need to redo your changes.");
+                displayWithdraw(accountService, scanner);
+            }
         }
     }
 

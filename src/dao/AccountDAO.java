@@ -1,6 +1,7 @@
 package dao;
 
 import entity.Account;
+import org.apache.openjpa.persistence.OptimisticLockException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,8 +21,7 @@ public final class AccountDAO {
             em.persist(account);
             em.getTransaction().commit();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            em.getTransaction().rollback();
         }
         close(em);
     }
@@ -67,15 +67,17 @@ public final class AccountDAO {
         return new ArrayList<>();
     }
 
-    public void update(Account account) {
+    public void update(Account account) throws OptimisticLockException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(account);
             em.getTransaction().commit();
+        } catch (OptimisticLockException ole) {
+            em.getTransaction().rollback();
+            throw new OptimisticLockException(ole.getMessage(), ole.getNestedThrowables(), ole.getFailedObject(), false);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            em.getTransaction().rollback();
         }
         close(em);
     }
@@ -83,11 +85,12 @@ public final class AccountDAO {
     public void delete(long accountNumber) {
         EntityManager em = emf.createEntityManager();
         try {
-            Account account = (Account) find(accountNumber);
+            Account account = find(accountNumber);
             em.getTransaction().begin();
             em.remove(account);
             em.getTransaction().commit();
         } catch (Exception e) {
+            em.getTransaction().rollback();
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
