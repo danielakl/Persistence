@@ -14,9 +14,10 @@ public final class Client {
 
     /* Menu Options */
     private static final int TRANSFER = 1;
-    private static final int WITHDRAW = 2;
-    private static final int SHOW_ALL = 3;
-    private static final int EXIT = 4;
+    private static final int DEPOSIT = 2;
+    private static final int WITHDRAW = 3;
+    private static final int SHOW_ALL = 4;
+    private static final int EXIT = 5;
 
     public static void main(String[] args) {
         processArgs(args);
@@ -59,24 +60,25 @@ public final class Client {
                 }
             } while(currentAccount == null);
 
-            do {
+            while (option != EXIT) {
                 option = displayMenu(scanner);
-                if (option != EXIT) {
-                    switch (option) {
-                        case TRANSFER:
-                            displayTransfer(accountService, scanner);
-                            break;
-                        case WITHDRAW:
-                            displayWithdraw(accountService, scanner);
-                            break;
-                        case SHOW_ALL:
-                            displayAllAccounts(accountService);
-                            break;
-                        default:
-                            break;
-                    }
+                switch (option) {
+                    case TRANSFER:
+                        displayTransfer(accountService, scanner);
+                        break;
+                    case DEPOSIT:
+                        displayDeposit(accountService, scanner);
+                        break;
+                    case WITHDRAW:
+                        displayWithdraw(accountService, scanner);
+                        break;
+                    case SHOW_ALL:
+                        displayAllAccounts(accountService);
+                        break;
+                    default:
+                        break;
                 }
-            } while(option != EXIT);
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
@@ -100,6 +102,13 @@ public final class Client {
         }
     }
 
+    /**
+     * Create a new account.
+     * @param accountService    - Service used to create a new account.
+     * @param scanner           - Scanner used to read user input.
+     * @param owner             - The owner of the new account.
+     * @return an integer signal, EXIT if the client should exit otherwise 0.
+     */
     private static int createAccount(AccountService accountService, Scanner scanner, String owner) {
         System.out.print("You do not already own any accounts. \nDo you wish to create one? ");
         String answer = scanner.nextLine().toLowerCase();
@@ -118,9 +127,10 @@ public final class Client {
      * @return the option the user picked.
      */
     private static int displayMenu(Scanner scanner) {
-        System.out.println("\n" + currentAccount.toString());
+        System.out.println("\nCurrent " + currentAccount.toString());
         System.out.println("\nMain Menu\n" +
                 TRANSFER + ": Transfer funds to another account.\n" +
+                DEPOSIT + ": Deposit funds into your account.\n" +
                 WITHDRAW + ": Withdraw funds from your account.\n" +
                 SHOW_ALL + ": Display all accounts.\n" +
                 EXIT + ": Exit the application");
@@ -153,6 +163,21 @@ public final class Client {
                 double amount = Double.parseDouble(input);
                 accountService.transfer(currentAccount, recipient, amount);
             }
+        }
+    }
+
+    /**
+     * Displays the menu for depositing funds into your account.
+     * @param accountService    - Service used to execute deposit.
+     * @param scanner           - Scanner used to read user input.
+     */
+    private static void displayDeposit(AccountService accountService, Scanner scanner) {
+        System.out.println("\nCurrent balance: " + currentAccount.getBalance());
+        System.out.print("Enter the amount to deposit: ");
+        String input = scanner.nextLine().trim().replace(',', '.');
+        if (input.matches("[0-9.]+")) {
+            double amount = Double.parseDouble(input);
+            accountService.deposit(currentAccount, amount);
         }
     }
 

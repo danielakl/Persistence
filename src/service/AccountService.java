@@ -121,6 +121,19 @@ public final class AccountService {
     }
 
     /**
+     * Deposit funds into an account.
+     * @param account   - The account to deposit to.
+     * @param amount    - The amount to deposit.
+     */
+    public void deposit(Account account, double amount) {
+        if (account != null) {
+            amount = Math.abs(amount);
+            account.setBalance(account.getBalance() + amount);
+            accountDAO.update(account);
+        }
+    }
+
+    /**
      * Withdraw funds from an account.
      * @param account   - The account to withdraw from.
      * @param amount    - The amount to withdraw.
